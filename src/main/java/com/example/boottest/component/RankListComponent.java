@@ -31,6 +31,13 @@ public class RankListComponent {
         return new RankDO(rank + 1, Math.abs(score.floatValue()), userId);
     }
 
+    /**
+     * 用户是否存在
+     */
+    public boolean exist(Long userId) {
+        return redisComponent.rank(RANK_PREFIX, String.valueOf(userId)) != null;
+    }
+
     public List<RankDO> getRankAroundUser(Long userId, int n) {
         RankDO rank = getRank(userId);
         if (rank.getRank() <= 0) {
