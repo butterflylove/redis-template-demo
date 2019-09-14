@@ -1,16 +1,18 @@
 package com.example.boottest.controller;
 
-import com.example.boottest.annotation.UserIdValidation;
 import com.example.boottest.component.RankListComponent;
+import com.example.boottest.entity.ModifyVO;
 import com.example.boottest.entity.RankDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RankController {
@@ -40,8 +42,16 @@ public class RankController {
         return rankListComponent.getTopNRanks(n);
     }
 
-    @GetMapping(value = "/modify")
-    public Object modify(@RequestParam("userId") @UserIdValidation(message = "userId不存在") String userId) {
+    @PostMapping(value = "/modify")
+    public Object modify(@Valid @RequestBody ModifyVO modifyVO,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> error = new HashMap<>();
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                error.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            return error;
+        }
         return "success";
     }
 }
