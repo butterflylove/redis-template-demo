@@ -3,3 +3,4 @@
 2. 自定义validation
 3. OptionalInt使用
 4. reduce的两种使用姿势
+5. method reference的四种姿势
