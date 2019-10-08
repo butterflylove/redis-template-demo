@@ -6,6 +6,7 @@ import com.example.boottest.entity.RankDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,8 @@ public class RankController {
     private static final Logger logger = LoggerFactory.getLogger(RankController.class);
     @Autowired
     private RankListComponent rankListComponent;
+    @Value("${commandLine.testEnv}")
+    private String testEnv;
 
     @GetMapping(path = "/update")
     public RankDO updateScore(long userId, float score) {
@@ -53,5 +56,10 @@ public class RankController {
             return error;
         }
         return "success";
+    }
+
+    @GetMapping(value = "/testEnv")
+    public String testEnv() {
+        return testEnv;
     }
 }
