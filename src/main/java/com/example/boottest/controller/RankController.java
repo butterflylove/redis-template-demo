@@ -3,6 +3,7 @@ package com.example.boottest.controller;
 import com.example.boottest.component.RankListComponent;
 import com.example.boottest.entity.ModifyVO;
 import com.example.boottest.entity.RankDO;
+import com.example.boottest.entity.TestTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class RankController {
@@ -22,6 +27,8 @@ public class RankController {
     private RankListComponent rankListComponent;
     @Value("${commandLine.testEnv}")
     private String testEnv;
+    private ForkJoinPool forkJoinPool = new ForkJoinPool(4);
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3);
 
     @GetMapping(path = "/update")
     public RankDO updateScore(long userId, float score) {
@@ -61,5 +68,20 @@ public class RankController {
     @GetMapping(value = "/testEnv")
     public String testEnv() {
         return testEnv;
+    }
+
+    @GetMapping(value = "/testForkJoin")
+    public String testForkJoinPool() {
+        forkJoinPool.submit(new TestTask());
+        forkJoinPool.submit(new TestTask());
+        forkJoinPool.submit(new TestTask());
+        forkJoinPool.submit(new TestTask());
+        return "testForkJoin";
+    }
+
+    @GetMapping(value = "/testScheduled")
+    public String testScheduled() {
+        executor.scheduleWithFixedDelay(new TestTask(), 5, 5, TimeUnit.SECONDS);
+        return "success";
     }
 }

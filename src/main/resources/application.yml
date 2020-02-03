@@ -9,3 +9,5 @@ commandLine:
   testEnv: appFile
 
 
+server:
+  port: 10029
