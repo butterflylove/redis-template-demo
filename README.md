@@ -11,3 +11,4 @@ java -DcommandLine.testEnv=system -jar target/boot-test-0.0.1-SNAPSHOT.jar   # �
 
 java -jar target/boot-test-0.0.1-SNAPSHOT.jar --commandLine.testEnv=springcmd   # 命令行参数
 ```
+7. 使用apache commons-compress来进行gzip压缩,解压文件
