@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Set;
 
 @Component
@@ -30,5 +31,17 @@ public class RedisComponent {
 
     public Set<ZSetOperations.TypedTuple<String>> rangeWithScore(String key, long start, long end) {
         return redisTemplate.opsForZSet().rangeWithScores(key, start, end);
+    }
+
+    public void hashPut(String key, String field, String value) {
+        redisTemplate.opsForHash().put(key, field, value);
+    }
+
+    public void hashPutAll(String key, Map<String, String> map) {
+        redisTemplate.opsForHash().putAll(key, map);
+    }
+
+    public Map<Object, Object> hget(String key) {
+        return redisTemplate.opsForHash().entries(key);
     }
 }

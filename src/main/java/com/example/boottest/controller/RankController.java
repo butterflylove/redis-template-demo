@@ -1,6 +1,7 @@
 package com.example.boottest.controller;
 
 import com.example.boottest.component.RankListComponent;
+import com.example.boottest.component.RedisComponent;
 import com.example.boottest.entity.ModifyVO;
 import com.example.boottest.entity.RankDO;
 import com.example.boottest.entity.TestTask;
@@ -25,6 +26,8 @@ public class RankController {
     private static final Logger logger = LoggerFactory.getLogger(RankController.class);
     @Autowired
     private RankListComponent rankListComponent;
+    @Autowired
+    private RedisComponent redisComponent;
     @Value("${commandLine.testEnv}")
     private String testEnv;
     private ForkJoinPool forkJoinPool = new ForkJoinPool(4);
@@ -83,5 +86,27 @@ public class RankController {
     public String testScheduled() {
         executor.scheduleWithFixedDelay(new TestTask(), 5, 5, TimeUnit.SECONDS);
         return "success";
+    }
+
+    @GetMapping(value = "/testHash")
+    public String testHash() {
+        redisComponent.hashPut("zhangsan", "name", "zhang3");
+        redisComponent.hashPut("zhangsan", "age", "11");
+        return "true";
+    }
+
+    @GetMapping(value = "/testHashPutAll")
+    public String testPutAll() {
+        Map<String, String> map = new HashMap<String, String>() {{
+            put("name", "lisi");
+            put("age", "33");
+        }};
+        redisComponent.hashPutAll("lisi", map);
+        return "true";
+    }
+
+    @GetMapping(value = "/hget")
+    public Map<Object, Object> hget(@RequestParam("key") String key) {
+        return redisComponent.hget(key);
     }
 }
