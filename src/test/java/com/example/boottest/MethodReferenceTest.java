@@ -86,7 +86,7 @@ class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "Person{" +
                 "name='" + name + '\'' +
                 ", score=" + score +
                 '}';
