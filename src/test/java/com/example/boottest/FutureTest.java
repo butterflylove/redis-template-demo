@@ -22,4 +22,21 @@ public class FutureTest {
         logger.info("=====end future");
         return 10;
     }
+
+    @Test
+    public void testExceptionally() {
+        CompletableFuture<Integer> futureInt = CompletableFuture
+                .supplyAsync(() -> logException())
+                .exceptionally(e -> {
+                    logger.warn("=====xx", e);
+                    return  100;
+                });
+        logger.info("int:{}", futureInt.join());
+    }
+
+    private static int logException() {
+        logger.info("=====enter future");
+        LockSupport.parkNanos(1000_000_000L);
+        throw new RuntimeException("error");
+    }
 }
