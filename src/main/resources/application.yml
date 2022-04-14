@@ -4,6 +4,10 @@ spring:
     database: 0
     port: 6379
 #    password:
+  data:
+    elasticsearch:
+      cluster-name: myes
+      cluster-nodes: 127.0.0.1:9200
 
 commandLine:
   testEnv: appFile
